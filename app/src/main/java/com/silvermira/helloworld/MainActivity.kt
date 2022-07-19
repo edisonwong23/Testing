@@ -1,5 +1,6 @@
 package com.silvermira.helloworld
 
+import android.content.Context
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.silvermira.helloworld.databinding.ActivityMainBinding
 
@@ -55,8 +57,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateName() {
+    private fun updateName(view : View) {
         name = binding.nameInput.text.toString()
+
+        binding.nameInput.text.clear();
+        binding.nameInput.clearFocus()
+
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        //imm.showSoftInput(binding.nameInput, 0)
+       // imm.hideSoftInputFromWindow( view, 0)
     }
 
     private fun rollDice() {
