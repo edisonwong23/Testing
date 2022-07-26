@@ -10,14 +10,22 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import com.silvermira.helloworld.databinding.ActivityMainBinding
+import androidx.databinding.DataBindingUtil
+import com.silvermira.helloworld.databinding.ActivityMainBinding as ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    
+    lateinit var binding: ActivityMainBinding
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
+
+    private val playerName: GameInfo = GameInfo("Ready Player One?")
+
+   // private lateinit var binding: ActivityMainBinding
+
 
     private var count = 0
             set(value) {
@@ -26,10 +34,10 @@ class MainActivity : AppCompatActivity() {
             };
 
     private var name = ""
-    set(value) {
-        field = value
-        binding.welcomeText.text = welcomeText()
-    }
+   // set(value) {
+   //     field = value
+   //     binding.welcomeText.text = welcomeText()
+   // }
 
     private fun welcomeText(): String {
         return String.format(resources.getString(R.string.welcome), name)
@@ -40,12 +48,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        binding.gameInfo = playerName
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         count = 0
-        name = ""
+
         binding.clickButton.setOnClickListener {
             count++;
         }
@@ -53,19 +65,20 @@ class MainActivity : AppCompatActivity() {
             rollDice();
         }
         binding.updateNameButton.setOnClickListener {
-            updateName();
+            updateName(it);
         }
     }
 
     private fun updateName(view : View) {
+        //view : View
         name = binding.nameInput.text.toString()
 
         binding.nameInput.text.clear();
         binding.nameInput.clearFocus()
 
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        //imm.showSoftInput(binding.nameInput, 0)
-       // imm.hideSoftInputFromWindow( view, 0)
+        imm.showSoftInput(binding.nameInput, 0)
+        imm.hideSoftInputFromWindow(  view.windowToken ,0)
     }
 
     private fun rollDice() {
